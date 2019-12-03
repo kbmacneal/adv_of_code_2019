@@ -93,6 +93,7 @@ namespace adv_of_code_2019
                         if (inputs2[0] == 19690720)
                         {
                             Console.WriteLine (string.Format ("f({0},{1}) = {2}", j, g, inputs2[0]));
+                            return;
                         }
                 }
             }
