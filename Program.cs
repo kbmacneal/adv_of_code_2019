@@ -9,8 +9,8 @@ namespace adv_of_code_2019
         static void Main(string[] args)
         {
             Console.WriteLine("Input Day");
-            // var day = Console.ReadLine();
-            var day = "3";
+            var day = Console.ReadLine();
+            // var day = "3";
 
             if(Int32.TryParse(day,out var day_num))
             {
