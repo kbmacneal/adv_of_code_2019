@@ -49,7 +49,17 @@ namespace adv_of_code_2019
                 Console.WriteLine ("Part 1: " + inputs[0].ToString ());
 
             //brute-forcing it
+            //f(j,g)=f(j,0)+g
+            //f(84,0)=19690642
+            //f(83,0)=19460242 -230400
+            //f(82,0)=19229842 -230400
 
+            //f(1,0) = 567442
+            //f(2,0) = 797842
+            //f(3,0) = 567442
+            //f(4,0) = 567442
+
+            //f(n,0)=23400n+567441
             for (int g = 0; g < 99; g++)
             {
                 for (int j = 0; j < 99; j++)
