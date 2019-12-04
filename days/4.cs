@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace adv_of_code_2019 {
     public class Day4 {
+        #pragma warning disable 1998
         public static async Task Run () {
             int start = 136818;
             int stop = 685979;
@@ -17,9 +18,8 @@ namespace adv_of_code_2019 {
             var answer2 = Enumerable.Range(start,stop-start).ToList().Where(e=>CheckAdjacency(e) && CheckIncreasing(e) && CheckOnlyTwo(e)).Count();
 
             Console.WriteLine("Part 2: "+ answer2);
-
         }
-
+        #pragma warning restore 1998
         private static bool CheckAdjacency(int num)
         {
             List<int> checker = num.ToString().Select(e=>Int32.Parse(e.ToString())).ToList();
