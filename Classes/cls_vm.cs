@@ -24,11 +24,8 @@ namespace adv_of_code_2019.Classes
 
         public async Task<int> Process()
         {
-            int steps = 0;
-
             List<int> raw_input = input_instructions.Split(",").Select(e => Int32.Parse(e)).ToList();
 
-            int code = 0;
             int opcode = 0;
 
             for (int i = 0; opcode != END;)
@@ -94,8 +91,6 @@ namespace adv_of_code_2019.Classes
                     default:
                         break;
                 }
-
-               
             }
             return 9999;
         }

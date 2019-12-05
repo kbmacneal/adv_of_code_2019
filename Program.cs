@@ -1,5 +1,4 @@
-﻿using adv_of_code_2019.days;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
