@@ -1,18 +1,19 @@
-﻿using System;
+﻿using adv_of_code_2019.days;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2019
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Input Day");
             var day = Console.ReadLine();
-            // var day = "3";
+            //var day = "5";
 
-            if(Int32.TryParse(day,out var day_num))
+            if (Int32.TryParse(day, out var day_num))
             {
                 // var cls = Type.GetType("Day" + day_num.ToString());
 
@@ -20,10 +21,14 @@ namespace adv_of_code_2019
 
                 MethodInfo method = cls.GetMethod("Run");
 
-                Task result = (Task)method.Invoke(null,null);
-                result.GetAwaiter().GetResult();
-            }
+                Task result = (Task)method.Invoke(null, null);
 
+                //result.Start();
+
+                result.Wait();
+
+                result.Dispose();
+            }
         }
     }
 }

@@ -11,4 +11,8 @@
   </Content> 
 </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="inputs\5.txt" />
+  </ItemGroup>
+
 </Project>
