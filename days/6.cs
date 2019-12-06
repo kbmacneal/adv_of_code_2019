@@ -96,7 +96,6 @@ namespace adv_of_code_2019
                 allOrbits.Add(new orbit(relation.Orbiter, relation.Target));
             }
 
-
             var rootOrbit = new orbit("COM", null);
             rootOrbit.assignallchildren(allOrbits);
             return rootOrbit;
@@ -111,7 +110,7 @@ namespace adv_of_code_2019
             var com = GenerateOrbitList(relations.ToList());
 
             var count = com.count_orbits();
-            
+
             Console.WriteLine("Part 1:" + count.ToString());
 
             var santa = com.FindChildren("SAN");
@@ -138,7 +137,6 @@ namespace adv_of_code_2019
                     break;
                 }
             }
-
         }
     }
 }
