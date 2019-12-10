@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace adv_of_code_2019.Classes
@@ -10,6 +11,11 @@ namespace adv_of_code_2019.Classes
             if (values.Count() == 1)
                 return new[] { values };
             return values.SelectMany(v => Permutations(values.Where(x => x.Equals(v) == false)), (v, p) => p.Prepend(v));
+        }
+
+        public static Int32 Abs(this Int32 num)
+        {
+            return Math.Abs(num);
         }
     }
 }

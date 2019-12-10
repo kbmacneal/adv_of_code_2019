@@ -10,7 +10,7 @@ namespace adv_of_code_2019
         {
             Console.WriteLine("Input Day");
             var day = Console.ReadLine();
-            // var day = "9";
+            // var day = "10";
 
             if (Int32.TryParse(day, out var day_num))
             {
