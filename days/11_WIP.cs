@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -15,61 +14,33 @@ namespace adv_of_code_2019 {
 
         private static bool is_coloring_mode = true;
 
-        private static Dictionary<Panel, int> canvas = new Dictionary<Panel, int> ();
+        private static List<long> commands = File.ReadAllText("inputs\\11.txt").Split(",").Select(Int64.Parse).ToList();
 
-        private class Panel {
-            public int X { get; set; }
-            public int Y { get; set; }
-            public Panel (int x, int y) {
-                this.X = x;
-                this.Y = y;
-            }
-        }
+        private static Processor processor = new Processor(commands.ToArray());
+        private static Dictionary<Point, int> canvas { get; set; } = new Dictionary<Point, int> ();
+
+        private static HashSet<Point> PaintedPositions { get; set; } = new HashSet<Point> ();
 
         private static int current_direction = 0;
-        private static Panel current_loc { get; set; } = new Panel (0, 0);
+        private static Point current_loc { get; set; } = new Point (0, 0);
+
+        private static Point[] directions { get; } = new [] { new Point (-1, 0), new Point (0, 1), new Point (1, 0), new Point (0, -1) };
 
         public static async Task Run () {
-            var inputs = await File.ReadAllTextAsync ("inputs\\11.txt");
 
-            List<long> commands = new List<long> ();
-
-            foreach (string s in inputs.Split (',')) {
-
-                if (long.TryParse (s, out long parsed)) {
-                    commands.Add (parsed);
-                } else {
-                    throw new Exception ($"Failed to parse '{s}' to a long");
-                }
-            }
-
-            var part1 = await PaintAsync (new Processor (commands.ToArray ()));
+            var part1 = await PaintAsync ();
 
             Console.WriteLine ("Part 1: " + part1);
 
-            // Processor pcA = new Processor (commands.ToArray ());
-            // pcA.ProgramOutput += Pc_ProgramOutput;
-            // pcA.ProgramFinish += Pc_ProgramFinish;
-            // pcA.AddInput (1);
-
-            // Console.WriteLine ("Part 1:");
-            // pcA.ProccessProgram ();
-
-            // pcA.ResetInputs ();
-            // pcA.AddInput (2);
-
-            // Console.WriteLine ("Part 2:");
-            // pcA.ProccessProgram ();
-
         }
 
-        private static async Task<int> PaintAsync (Processor processor) {
+        private static async Task<int> PaintAsync () {
 
             var rtn = 0;
 
-            canvas.Add (new Panel (0, 0), 0);
+            var color = canvas.GetOrAdd (current_loc, _ => 0);
 
-            processor.AddInput (0);
+            processor.AddInput (color);
 
             processor.ProgramOutput += OnOutput;
 
@@ -85,11 +56,8 @@ namespace adv_of_code_2019 {
             if (is_coloring_mode) {
                 long out_val = e.OutputValue;
 
-                if (canvas.Count (e => e.Key.X == current_loc.X && e.Key.Y == current_loc.Y) > 0) {
-                    // canvas.ReplaceValue<Panel,int>(current_loc,(int)out_val);
-                    canvas.Where (e => e.Key.X == current_loc.X && e.Key.Y == current_loc.Y).ToList ().ForEach (e => canvas.Remove (e.Key));
-                }
-                canvas.Add (new Panel (current_loc.X, current_loc.Y), (int) out_val);
+                canvas[current_loc] = (int) out_val;
+                PaintedPositions.Add (current_loc);
 
                 is_coloring_mode = !is_coloring_mode;
             } else {
@@ -99,29 +67,11 @@ namespace adv_of_code_2019 {
 
                 current_direction = (((int) current_direction + directionDelta + 4) % 4);
 
-                switch (current_direction) {
-                    case 0:
-                        current_loc.Y += 1;
-                        break;
-                    case 1:
-                        current_loc.X += 1;
-                        break;
-                    case 2:
-                        current_loc.Y -= 1;
-                        break;
-                    case 3:
-                        current_loc.X -= 1;
-                        break;
-                    default:
+                current_loc += directions[current_direction];
 
-                        throw new InvalidOperationException ("Attempted to move in invalid direction.");
-                }
+                var color = canvas.GetOrAdd (current_loc, _ => 0);
 
-                if (!canvas.TryGetValue (new Panel (current_loc.X, current_loc.Y), out var color)) {
-                    canvas.Add (current_loc, 0);
-                }
-
-                (sender as Processor).AddInput (canvas[current_loc]);
+                processor.AddInput (color);
 
                 is_coloring_mode = !is_coloring_mode;
             }

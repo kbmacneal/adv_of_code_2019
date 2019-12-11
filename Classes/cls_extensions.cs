@@ -25,5 +25,16 @@ namespace adv_of_code_2019.Classes {
             source.Remove (key);
             source.Add (key, newVal);
         }
+
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueGenerator)
+        {
+            if (!dictionary.TryGetValue(key, out var value))
+            {
+                value = valueGenerator(key);
+                dictionary.Add(key, value);
+            }
+
+            return value;
+        }
     }
 }
