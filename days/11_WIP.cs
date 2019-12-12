@@ -11,43 +11,55 @@ using adv_of_code_2019.Classes;
 using MoreLinq;
 using Point = adv_of_code_2019.Classes.Point;
 
-namespace adv_of_code_2019 {
+namespace adv_of_code_2019
+{
 
-    public class Day11 {
-
-        private static bool is_coloring_mode = true;
-
-        private static List<long> commands = File.ReadAllText ("inputs\\11.txt").Split (",").Select (Int64.Parse).ToList ();
-
-        private static Processor processor {get;set;} = new Processor (commands.ToArray ());
-        private static Dictionary<Point, int> canvas { get; set; } = new Dictionary<Point, int> ();
-
-        private static HashSet<Point> PaintedPositions { get; set; } = new HashSet<Point> ();
-
-        private static int current_direction = 0;
-        private static Point current_loc { get; set; } = new Point (0, 0);
-
-        private static Point[] directions { get; } = new [] { new Point (-1, 0), new Point (0, 1), new Point (1, 0), new Point (0, -1) };
-
-        public static async Task Run () {
-
-            var part1 = await PaintAsync ();
+    public static class Day11
+    {
+        public static async Task Run ()
+        {
+            painter paint = new painter ();
+            paint.initial_color = 0;
+            var part1 = await paint.PaintAsync ();
 
             Console.WriteLine ("Part 1: " + part1);
 
-            var text = await Paint2Async ();
+            var paint2 = new painter ();
+            paint2.initial_color = 1;
+            var text = await paint2.Paint2Async ();
 
-            Console.WriteLine ("Part 2:");
-            Console.Write (text);
-            Console.WriteLine();
+            if (!Directory.Exists ("outputs")) Directory.CreateDirectory ("outputs");
+
+            text.Save ("outputs\\11.png", ImageFormat.Png);
 
         }
+    }
 
-        private static async Task<int> PaintAsync () {
+    public class painter
+    {
+
+        private bool is_coloring_mode = true;
+
+        private static List<long> commands { get; set; } = File.ReadAllText ("inputs\\11.txt").Split (",").Select (Int64.Parse).ToList ();
+
+        private Processor processor { get; set; } = new Processor (commands.ToArray ());
+        private Dictionary<Point, int> canvas { get; set; } = new Dictionary<Point, int> ();
+
+        private HashSet<Point> PaintedPositions { get; set; } = new HashSet<Point> ();
+
+        private int current_direction { get; set; } = 0;
+        private Point current_loc { get; set; } = new Point (0, 0);
+
+        private Point[] directions { get; } = new [] { new Point (-1, 0), new Point (0, 1), new Point (1, 0), new Point (0, -1) };
+
+        public int initial_color { get; set; }
+
+        public async Task<int> PaintAsync ()
+        {
 
             var rtn = 0;
 
-            var color = canvas.GetOrAdd (current_loc, _ => 0);
+            var color = canvas.GetOrAdd (current_loc, _ => this.initial_color);
 
             processor.AddInput (color);
 
@@ -61,22 +73,12 @@ namespace adv_of_code_2019 {
 
         }
 
-        private static async Task<string> Paint2Async () {
-            processor = new Processor (commands.ToArray ());
+        public async Task<Bitmap> Paint2Async ()
+        {
 
-            canvas = new Dictionary<Point, int>();
+            var rtn = new Dictionary<Point, int> ();
 
-            current_loc = new Point (0, 0);
-
-            current_direction = 0;
-
-            PaintedPositions = new HashSet<Point> ();
-
-            is_coloring_mode = true;
-
-            var rtn = new Dictionary<Point,int>();
-
-            var color = canvas.GetOrAdd (current_loc, _ => 1);
+            var color = canvas.GetOrAdd (current_loc, _ => this.initial_color);
 
             processor.AddInput (color);
 
@@ -84,56 +86,71 @@ namespace adv_of_code_2019 {
 
             processor.ProccessProgram ();
 
-            // rtn = canvas.DistinctBy (e => e.Key).ToDictionary();
+            //rtn = canvas.DistinctBy(e => e.Key).ToDictionary();
+            var whitePoints = canvas.Where (x => x.Value == 1).Select (x => x.Key).ToList ();
+            var bottomleft = new Point (whitePoints.Min (x => x.X), whitePoints.Min (x => x.Y));
+            var topright = new Point (whitePoints.Max (x => x.X), whitePoints.Max (x => x.Y));
 
-            return Render(canvas);
+            var width = topright.X+1;
+
+            var height = topright.Y+1;
+
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap (height,width);
+
+            
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    bmp.SetPixel(y,x,Color.Black);
+
+                }
+            }
+            
+            whitePoints.ForEach(e=>bmp.SetPixel(e.Y,e.X,Color.White));
+
+            return bmp;
         }
 
-        private static string Render(Dictionary<Point,int> rtn)
+        private string Render ()
         {
-            var whitePoints = rtn.Where(x => x.Value == 1).Select(x => x.Key).ToList();
-            var topLeft = new Point(whitePoints.Min(x => x.X), whitePoints.Min(x => x.Y));
-            var bottomRight = new Point(whitePoints.Max(x => x.X), whitePoints.Max(x => x.Y));
-            var resultSb = new StringBuilder();
+            var whitePoints = canvas.Where (x => x.Value == 1).Select (x => x.Key).ToList ();
+            var topLeft = new Point (whitePoints.Min (x => x.X), whitePoints.Min (x => x.Y));
+            var bottomRight = new Point (whitePoints.Max (x => x.X), whitePoints.Max (x => x.Y));
+            var resultSb = new StringBuilder ();
             for (var x = topLeft.X; x <= bottomRight.X; x++)
             {
                 for (var y = topLeft.Y; y <= bottomRight.Y; y++)
                 {
-                    if (rtn.TryGetValue(new Point(x, y), out var color))
+                    if (canvas.TryGetValue (new Point (x, y), out var color))
                     {
-                        resultSb.Append(color == 0 ? ' ' : '#');
+                        resultSb.Append (color == 0 ? ' ' : '#');
                     }
                     else
                     {
-                        resultSb.Append(' ');
+                        resultSb.Append (' ');
                     }
                 }
-                resultSb.AppendLine();
+                resultSb.AppendLine ();
             }
 
-            return resultSb.ToString();
+            return resultSb.ToString ();
         }
 
-        private static void CleanColumn(int position, List<string> strings)
+        private void OnOutput (object sender, OutputEventArgs e)
         {
-
-            List<char> position_string = strings.Select(e => e.ElementAt(position)).ToList();
-
-            if(!position_string.Contains('#'))
+            if (this.is_coloring_mode)
             {
-                strings.ForEach(e=>e.Remove(position,1));
-            }
-        }
-
-        private static void OnOutput (object sender, OutputEventArgs e) {
-            if (is_coloring_mode) {
                 long out_val = e.OutputValue;
 
                 canvas[current_loc] = (int) out_val;
                 PaintedPositions.Add (current_loc);
 
                 is_coloring_mode = !is_coloring_mode;
-            } else {
+            }
+            else
+            {
                 long out_val = e.OutputValue;
 
                 var directionDelta = (int) out_val == 0 ? -1 : 1;
