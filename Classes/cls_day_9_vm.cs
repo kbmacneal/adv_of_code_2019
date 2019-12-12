@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace adv_of_code_2019.Classes
 {
@@ -25,6 +22,7 @@ namespace adv_of_code_2019.Classes
         public int RelativeBase { get; set; } = 0;
 
         public event EventHandler<OutputEventArgs> ProgramOutput;
+
         public event EventHandler ProgramFinish;
 
         public virtual void OnProgramOutput(OutputEventArgs e)
@@ -58,7 +56,6 @@ namespace adv_of_code_2019.Classes
         {
             AddInput(e.OutputValue);
         }
-
 
         public void ProccessProgram()
         {
@@ -143,13 +140,16 @@ namespace adv_of_code_2019.Classes
                         }
                         PC += 4;
                         break;
+
                     case Operation.RelativeBaseAdjust:
                         RelativeBase += (int)opParams[0];
                         PC += 2;
                         break;
+
                     case Operation.HALT:
                         OnProgramFinish(new EventArgs());
                         return;
+
                     default:
                         throw new Exception("Not a valid Opcode");
                 }
@@ -175,7 +175,6 @@ namespace adv_of_code_2019.Classes
                             immediate = (int)WorkingProgram[PC + i + 1];
                             if (modes[i] == Mode.Position && i != 2) //If it's the output location, we still need teh "immediate" value
                             {
-
                                 res[i] = WorkingProgram[(int)immediate];
                             }
                             else if (modes[i] == Mode.Relative)
@@ -204,6 +203,7 @@ namespace adv_of_code_2019.Classes
                         }
                     }
                     break;
+
                 case Operation.WriteOutput:
                 case Operation.RelativeBaseAdjust:
                     res = new long[1]; //Let's just assume that any operation can take 3 params except reading input (must wait for input) and Halting
@@ -211,7 +211,6 @@ namespace adv_of_code_2019.Classes
                     immediate = WorkingProgram[PC + 1];
                     if (modes[0] == Mode.Position)
                     {
-
                         res[0] = WorkingProgram[(int)immediate];
                     }
                     else if (modes[0] == Mode.Immediate)
@@ -224,6 +223,7 @@ namespace adv_of_code_2019.Classes
                     }
 
                     break;
+
                 case Operation.JumpTrue:
                 case Operation.JumpFalse:
                     res = new long[2];
@@ -234,7 +234,6 @@ namespace adv_of_code_2019.Classes
                             immediate = (int)WorkingProgram[PC + i + 1];
                             if (modes[i] == Mode.Position)
                             {
-
                                 res[i] = WorkingProgram[(int)immediate];
                             }
                             else if (modes[i] == Mode.Immediate)
@@ -268,7 +267,6 @@ namespace adv_of_code_2019.Classes
                     }
                     break;
 
-
                 case Operation.HALT: return null;
                 default:
                     throw new Exception("Not a valid Opcode");
@@ -292,7 +290,7 @@ namespace adv_of_code_2019.Classes
         }
     }
 
-    enum Operation
+    internal enum Operation
     {
         Add = 1,
         Multiply = 2,
@@ -306,15 +304,15 @@ namespace adv_of_code_2019.Classes
         HALT = 99
     }
 
-    enum Mode
+    internal enum Mode
     {
         Position = 0,
         Immediate = 1,
         Relative = 2
     }
+
     public class OutputEventArgs : EventArgs
     {
         public long OutputValue { get; set; }
     }
-
 }

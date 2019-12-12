@@ -22,9 +22,9 @@ namespace adv_of_code_2019.Classes
         private const int EQUALS = 8;
         private const int END = 99;
 
-        public async Task<int> Process ()
+        public async Task<int> Process()
         {
-            List<int> raw_input = input_instructions.Split (",").Select (e => Int32.Parse (e)).ToList ();
+            List<int> raw_input = input_instructions.Split(",").Select(e => Int32.Parse(e)).ToList();
 
             int opcode = 0;
 
@@ -61,7 +61,7 @@ namespace adv_of_code_2019.Classes
                         continue;
 
                     case OUTPUT:
-                        Console.WriteLine (raw_input[raw_input[i + 1]]);
+                        Console.WriteLine(raw_input[raw_input[i + 1]]);
                         i += 2;
                         continue;
 
@@ -102,9 +102,9 @@ namespace adv_of_code_2019.Classes
     {
         public string name { get; set; }
         public string input_instructions { get; set; }
-        public Queue<int> input { get; set; } = new Queue<int> ();
+        public Queue<int> input { get; set; } = new Queue<int>();
         public int[] state { get; set; }
-        public List<int> outputs { get; set; } = new List<int> ();
+        public List<int> outputs { get; set; } = new List<int>();
 
         public bool stopped { get; private set; } = false;
         public bool paused { get; private set; } = false;
@@ -121,13 +121,13 @@ namespace adv_of_code_2019.Classes
         private const int EQUALS = 8;
         private const int END = 99;
 
-        public void Reset ()
+        public void Reset()
         {
-            this.state = input_instructions.Split (",").Select (e => Int32.Parse (e)).ToArray ();
+            this.state = input_instructions.Split(",").Select(e => Int32.Parse(e)).ToArray();
 
-            this.input.Clear ();
+            this.input.Clear();
 
-            this.outputs.Clear ();
+            this.outputs.Clear();
 
             this.paused = false;
 
@@ -136,7 +136,7 @@ namespace adv_of_code_2019.Classes
             this.paused_at = 0;
         }
 
-        public async Task Process ()
+        public async Task Process()
         {
             //List<int> raw_input = input_instructions.Split(",").Select(e => Int32.Parse(e)).ToList();
 
@@ -172,7 +172,7 @@ namespace adv_of_code_2019.Classes
                         continue;
 
                     case INPUT:
-                        if (input.TryDequeue (out var input_dq))
+                        if (input.TryDequeue(out var input_dq))
                         {
                             this.state[this.state[i + 1]] = input_dq;
                             i += 2;
@@ -186,7 +186,7 @@ namespace adv_of_code_2019.Classes
                         }
 
                     case OUTPUT:
-                        outputs.Add (this.state[this.state[i + 1]]);
+                        outputs.Add(this.state[this.state[i + 1]]);
                         i += 2;
                         continue;
                     case END:
@@ -222,7 +222,7 @@ namespace adv_of_code_2019.Classes
             }
         }
 
-        public async Task Process (day7vm nextvm)
+        public async Task Process(day7vm nextvm)
         {
             //List<int> raw_input = input_instructions.Split(",").Select(e => Int32.Parse(e)).ToList();
 
@@ -260,7 +260,7 @@ namespace adv_of_code_2019.Classes
                         continue;
 
                     case INPUT:
-                        if (input.TryDequeue (out var input_dq))
+                        if (input.TryDequeue(out var input_dq))
                         {
                             this.state[this.state[i + 1]] = input_dq;
                             i += 2;
@@ -274,8 +274,8 @@ namespace adv_of_code_2019.Classes
                         }
 
                     case OUTPUT:
-                        outputs.Add (this.state[this.state[i + 1]]);
-                        nextvm.input.Enqueue (this.state[this.state[i + 1]]);
+                        outputs.Add(this.state[this.state[i + 1]]);
+                        nextvm.input.Enqueue(this.state[this.state[i + 1]]);
                         i += 2;
                         continue;
                     case END:
@@ -315,5 +315,4 @@ namespace adv_of_code_2019.Classes
     }
 
 #pragma warning restore 1707
-
 }
