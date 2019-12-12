@@ -197,7 +197,7 @@ namespace adv_of_code_2019.Classes
                                 throw new Exception("Something broke");
                             }
                         }
-                        catch (IndexOutOfRangeException e)
+                        catch (Exception)
                         {
                             res[i] = 0;
                         }
@@ -245,7 +245,7 @@ namespace adv_of_code_2019.Classes
                                 res[i] = WorkingProgram[(int)immediate + RelativeBase];
                             }
                         }
-                        catch (IndexOutOfRangeException e)
+                        catch (Exception)
                         {
                             res[i] = 0;
                         }
