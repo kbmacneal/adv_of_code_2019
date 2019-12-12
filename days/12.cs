@@ -23,11 +23,6 @@ namespace adv_of_code_2019 {
             }
         }
 
-        // <x=17, y=-12, z=13>
-        // <x=2, y=1, z=1>
-        // <x=-1, y=-17, z=7>
-        // <x=12, y=-14, z=18>
-
         public static async Task Run () {
             List<moon> moons = RefreshMoons ();
 
@@ -36,7 +31,6 @@ namespace adv_of_code_2019 {
             for (int i = 0; i < stepcount; i++) {
                 StepVelo (ref moons);
             }
-            // A moon's potential energy is the sum of the absolute values of its x, y, and z position coordinates. A moon's kinetic energy is the sum of the absolute values of its velocity coordinates.
 
             foreach (var moon in moons) {
                 moon.p_energy = ((int) moon.Position.X).Abs () + ((int) moon.Position.Y).Abs () + ((int) moon.Position.Z).Abs ();
@@ -60,8 +54,13 @@ namespace adv_of_code_2019 {
                 c++;
 
                 for (var axis = 0; axis < 3; axis++) {
-                    if (intervals[axis] == 0 && AreAxisStatesEqual (orig_moons.ToArray(), moons.ToArray(), (Axis) axis)) {
+                    // go through X => Y =>Z
+                    // find the interval that each axis processes through
+                    // compare to 0 to not recalculate the period of an axis twice
+                    if (intervals[axis] == 0 &&
+                        AreAxisStatesEqual (orig_moons.ToArray (), moons.ToArray (), (Axis) axis)) {
                         intervals[axis] = c;
+                        //complete when all the axes have a period associated with them
                         if (intervals.All (x => x > 0)) {
                             completed = true;
                             break;
@@ -69,8 +68,7 @@ namespace adv_of_code_2019 {
                     }
                 }
             }
-            var lcm = GetLeastCommonMultiple(intervals);
-            Console.WriteLine("Part 2: " + lcm.ToString());
+            Console.WriteLine ("Part 2: " + intervals.GetLCM().ToString());
         }
 
         private static List<moon> RefreshMoons () {
@@ -100,47 +98,26 @@ namespace adv_of_code_2019 {
             }
         }
 
-        public static long GetLeastCommonMultiple (int[] elements) {
-            long lcm = 1;
-            var divisor = 2;
-            while (true) {
-                var counter = 0;
-                var divisible = false;
-                for (var i = 0; i < elements.Length; i++) {
-                    if (elements[i] == 0) { return 0; } else if (elements[i] < 0) { elements[i] = elements[i] * (-1); }
-
-                    if (elements[i] == 1) { counter++; }
-                    if (elements[i] % divisor == 0) {
-                        divisible = true;
-                        elements[i] = elements[i] / divisor;
-                    }
-                }
-
-                if (divisible) { lcm = lcm * divisor; } else { divisor++; }
-
-                if (counter == elements.Length) { return lcm; }
-            }
-        }
-
         private static bool AreAxisStatesEqual (moon[] original, moon[] current, Axis axis) {
             var length = original.Length;
             for (var i = 0; i < length; i++) {
-                bool falseCondition;
+                bool rtn = false;
                 switch (axis) {
                     case Axis.X:
-                        falseCondition = original[i].Position.X != current[i].Position.X || original[i].Velocity.X != current[i].Velocity.X;
+                        rtn = original[i].Position.X != current[i].Position.X || original[i].Velocity.X != current[i].Velocity.X;
                         break;
                     case Axis.Y:
-                        falseCondition = original[i].Position.Y != current[i].Position.Y || original[i].Velocity.Y != current[i].Velocity.Y;
+                        rtn = original[i].Position.Y != current[i].Position.Y || original[i].Velocity.Y != current[i].Velocity.Y;
                         break;
                     case Axis.Z:
-                        falseCondition = original[i].Position.Z != current[i].Position.Z || original[i].Velocity.Z != current[i].Velocity.Z;
+                        rtn = original[i].Position.Z != current[i].Position.Z || original[i].Velocity.Z != current[i].Velocity.Z;
                         break;
                     default:
                         throw new InvalidOperationException ();
                 }
-                if (falseCondition) { return false; }
+                if (rtn) { return false; }
             }
+            //this is the statement that gets hit when all moons have hit a previous state along a given axis
             return true;
         }
         private enum Axis { X = 0, Y = 1, Z = 2 }
