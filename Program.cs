@@ -1,33 +1,82 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CommandLine;
 
 namespace adv_of_code_2019
 {
     internal class Program
     {
-        private static void Main(string[] args)
+
+        public class RuntimeOptions
         {
-            Console.WriteLine("Input Day");
-            var day = Console.ReadLine();
-            // var day = "12";
+            [Option ('d', "day", HelpText = "[Number of day] Run the solution for the given day.")]
+            public int day { get; set; }
 
-            if (Int32.TryParse(day, out var day_num))
-            {
-                // var cls = Type.GetType("Day" + day_num.ToString());
+            [Option ('l', "latest", HelpText = "Run the solution using the latest day.")]
+            public bool latest { get; set; }
+        }
+        private static void Main (string [] args)
+        {
+            Parser.Default.ParseArguments<RuntimeOptions> (args)
+                .WithParsed<RuntimeOptions> (o =>
+                {
+                    if (o.day > 0 && o.latest)
+                    {
+                        Console.WriteLine ("Cannot use -d and -l together.");
+                    }
 
-                var cls = Assembly.GetEntryAssembly().GetType("adv_of_code_2019.Day" + day_num.ToString());
+                    if (o.latest)
+                    {
+                        var max_day = Assembly.GetEntryAssembly ().GetTypes ().Where (e => e.FullName.Contains ("Day") && !e.FullName.Contains("+")).Select (e => e.FullName.Substring(20)).Select (Int32.Parse).Max ();
 
-                MethodInfo method = cls.GetMethod("Run");
+                        Console.WriteLine("Running " + "adv_of_code_2019.Day" + max_day.ToString ());
 
-                Task result = (Task)method.Invoke(null, null);
+                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + max_day.ToString ());
 
-                //result.Start();
+                        MethodInfo method = cls.GetMethod ("Run");
 
-                result.Wait();
+                        Task result = (Task) method.Invoke (null, null);
 
-                result.Dispose();
-            }
+                        result.Wait ();
+
+                        result.Dispose ();
+                    }
+
+                    if (o.day > 0)
+                    {
+                        Console.WriteLine("Running " + "adv_of_code_2019.Day" + o.day.ToString ());
+
+                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + o.day.ToString ());
+
+                        MethodInfo method = cls.GetMethod ("Run");
+
+                        Task result = (Task) method.Invoke (null, null);
+
+                        result.Wait ();
+
+                        result.Dispose ();
+                    }             
+
+                    if(!o.latest && o.day == 0)
+                    {
+                        Console.WriteLine ("Input Day");
+
+                        if (Int32.TryParse (Console.ReadLine (), out var day_num))
+                        {
+                            var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + day_num.ToString ());
+
+                            MethodInfo method = cls.GetMethod ("Run");
+
+                            Task result = (Task) method.Invoke (null, null);
+
+                            result.Wait ();
+
+                            result.Dispose ();
+                        }
+                    }       
+                });
         }
     }
 }
