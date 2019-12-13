@@ -4,18 +4,16 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <NoWarn>1998</NoWarn>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
   </PropertyGroup>
 
   <ItemGroup> 
   <Content Include="inputs\**"> 
     <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
   </Content> 
 </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="inputs\5.txt" />
-    <None Remove="inputs\9_test.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
