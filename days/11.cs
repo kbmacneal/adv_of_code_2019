@@ -128,6 +128,11 @@ namespace adv_of_code_2019
                 OutputQueue = outputQueue ?? new Queue<long>();
             }
 
+            public void SetMemoryRegister(int index, long value)
+            {
+                this.myMemory[index] = value;
+            }
+
             public ReturnCode RunUntilBlockOrComplete()
             {
                 var rawParams = new long[ParameterCountsByOpCode.Values.Max()];

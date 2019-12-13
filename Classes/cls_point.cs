@@ -3,7 +3,7 @@ using System;
 namespace adv_of_code_2019.Classes
 {
     [System.Diagnostics.DebuggerDisplay("X={X} Y={Y}")]
-    internal struct Point : IEquatable<Point>
+    public class Point : IEquatable<Point>
     {
         public int X { get; }
 
@@ -60,5 +60,16 @@ namespace adv_of_code_2019.Classes
 
         private double? myAngle;
         private double? myLength;
+    }
+
+    public interface IPoint : IEquatable<IPoint>
+    {
+        public int X { get; }
+
+        public int Y { get; }
+
+        public bool Equals(Point other) => X == other.X && Y == other.Y;
+
+        public static Point Empty { get; } = new Point(0, 0);
     }
 }
