@@ -34,7 +34,6 @@ namespace adv_of_code_2019
             Map = new Dictionary<Classes.Point, Tile>() { [new Classes.Point(0, 0)] = Tile.Empty };
             PathToOxygenGenerator = new List<Classes.Point>();
             await Backtrack(new Point(0, 0), null);
-            PathToOxygenGenerator.Reverse();
 
             Console.WriteLine("Part 1: " + PathToOxygenGenerator.Count().ToString());
 
