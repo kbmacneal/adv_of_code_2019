@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics;
 
 namespace adv_of_code_2019.Classes
 {
-    [System.Diagnostics.DebuggerDisplay("X={X} Y={Y}")]
-    public class Point : IEquatable<Point>
+    [DebuggerDisplay("X={X} Y={Y}")]
+    public struct Point : IEquatable<Point>
     {
         public int X { get; }
 

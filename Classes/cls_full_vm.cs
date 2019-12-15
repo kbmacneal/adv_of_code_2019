@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace adv_of_code_2019.Classes
 {
-
     public abstract class IntMachineBase
     {
         public static List<string> GetLines(string input)
@@ -56,13 +53,16 @@ namespace adv_of_code_2019.Classes
                     case 0:
                         resolvedParams[i] = myMemory.GetOrAdd(rawParams[i], _ => 0);
                         break;
+
                     case 1:
                         resolvedParams[i] = rawParams[i];
                         break;
+
                     case 2:
                         resolvedParams[i] = myMemory.GetOrAdd(rawParams[i] + myRelativeBase, _ => 0);
                         rawParams[i] = rawParams[i] + myRelativeBase;
                         break;
+
                     default:
                         throw new InvalidOperationException($"Unknown parameter mode: {parameterModes[i]}");
                 }

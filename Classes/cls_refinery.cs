@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace adv_of_code_2019.Classes
 {
     public class Refinery
     {
-        public Dictionary<string,RefineryReaction> Reactions = new Dictionary<string,RefineryReaction>();
+        public Dictionary<string, RefineryReaction> Reactions = new Dictionary<string, RefineryReaction>();
         public Dictionary<string, int> Surplus = new Dictionary<string, int>();
         public long OreRequired = 0;
+
         public Refinery(string[] reactionList)
         {
             Regex r = new Regex(@"(\d+ [A-Z]+)");
@@ -49,7 +49,6 @@ namespace adv_of_code_2019.Classes
                 OreRequired += request.Amount;
                 return;
             }
-
 
             /* Check if we've overproduced the requested chemical previously */
             if (Surplus.ContainsKey(request.Chemical))
@@ -111,5 +110,4 @@ namespace adv_of_code_2019.Classes
         public List<RefineryProduction> Precursors = new List<RefineryProduction>();
         public RefineryProduction Output;
     }
-
 }

@@ -1,9 +1,6 @@
 using adv_of_code_2019.Classes;
-using MoreLinq;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -88,7 +85,6 @@ namespace adv_of_code_2019
 
             while (intMachine.RunUntilBlockOrComplete() != SynchronousIntMachine.ReturnCode.Completed)
             {
-
                 var color = canvas.GetOrAdd(pos, _ => 0);
                 intMachine.InputQueue.Enqueue(color);
 
@@ -149,35 +145,45 @@ namespace adv_of_code_2019
                         case 1:
                             myMemory[rawParams[2]] = resolvedParams[0] + resolvedParams[1];
                             break;
+
                         case 2:
                             myMemory[rawParams[2]] = resolvedParams[0] * resolvedParams[1];
                             break;
+
                         case 3:
                             if (InputQueue.Count == 0) { return ReturnCode.WaitingForInput; } // Read cannot be completed, return and repeat the same command on continue.
                             myMemory[rawParams[0]] = InputQueue.Dequeue();
                             break;
+
                         case 4:
                             OutputQueue.Enqueue(resolvedParams[0]);
                             returnCode = ReturnCode.WrittenOutput;
                             break;
+
                         case 5:
                             if (resolvedParams[0] != 0) { myPos = resolvedParams[1]; continue; }
                             break;
+
                         case 6:
                             if (resolvedParams[0] == 0) { myPos = resolvedParams[1]; continue; }
                             break;
+
                         case 7:
                             myMemory[rawParams[2]] = resolvedParams[0] < resolvedParams[1] ? 1 : 0;
                             break;
+
                         case 8:
                             myMemory[rawParams[2]] = resolvedParams[0] == resolvedParams[1] ? 1 : 0;
                             break;
+
                         case 9:
                             myRelativeBase += resolvedParams[0];
                             break;
+
                         case 99:
                             returnCode = ReturnCode.Completed;
                             break;
+
                         default:
                             throw new InvalidOperationException($"Unknown operator: {opCode}");
                     }

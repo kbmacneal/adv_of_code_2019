@@ -8,7 +8,6 @@ namespace adv_of_code_2019
 {
     internal class Program
     {
-
         public class RuntimeOptions
         {
             [Option ('d', "day", HelpText = "[Number of day] Run the solution for the given day.")]
@@ -17,6 +16,7 @@ namespace adv_of_code_2019
             [Option ('l', "latest", HelpText = "Run the solution using the latest day.")]
             public bool latest { get; set; }
         }
+
         private static void Main (string [] args)
         {
             Parser.Default.ParseArguments<RuntimeOptions> (args)
@@ -57,7 +57,7 @@ namespace adv_of_code_2019
                         result.Wait ();
 
                         result.Dispose ();
-                    }             
+                    }
 
                     if(!o.latest && o.day == 0)
                     {
@@ -75,7 +75,7 @@ namespace adv_of_code_2019
 
                             result.Dispose ();
                         }
-                    }       
+                    }
                 });
         }
     }

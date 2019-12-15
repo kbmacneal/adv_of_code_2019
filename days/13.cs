@@ -1,20 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using adv_of_code_2019.Classes;
-using MoreLinq;
 using VectorAndPoint.ValTypes;
 using static adv_of_code_2019.painter;
 using static adv_of_code_2019.painter.SynchronousIntMachine;
 
 namespace adv_of_code_2019
 {
-
     public static class Day13
     {
         private enum tile_type
@@ -26,78 +20,77 @@ namespace adv_of_code_2019
             Ball = 4
         }
 
-        public static async Task Run ()
+        public static async Task Run()
         {
-            var input = await File.ReadAllTextAsync ("inputs\\13.txt");
+            var input = await File.ReadAllTextAsync("inputs\\13.txt");
 
-            Dictionary<PointInt, tile_type> tiles = new Dictionary<PointInt, tile_type> ();
+            Dictionary<PointInt, tile_type> tiles = new Dictionary<PointInt, tile_type>();
 
-            var intMachine = new SynchronousIntMachine (input);
+            var intMachine = new SynchronousIntMachine(input);
 
-            while (intMachine.RunUntilBlockOrComplete () == ReturnCode.WrittenOutput)
+            while (intMachine.RunUntilBlockOrComplete() == ReturnCode.WrittenOutput)
             {
-                while (intMachine.OutputQueue.Count < 3) { intMachine.RunUntilBlockOrComplete (); }
-                var x = (int) intMachine.OutputQueue.Dequeue ();
-                var y = (int) intMachine.OutputQueue.Dequeue ();
-                var tile = intMachine.OutputQueue.Dequeue ();
+                while (intMachine.OutputQueue.Count < 3) { intMachine.RunUntilBlockOrComplete(); }
+                var x = (int)intMachine.OutputQueue.Dequeue();
+                var y = (int)intMachine.OutputQueue.Dequeue();
+                var tile = intMachine.OutputQueue.Dequeue();
 
-                tiles [new PointInt (x, y)] = (tile_type) tile;
+                tiles[new PointInt(x, y)] = (tile_type)tile;
             }
 
-            var blocks = tiles.Where (e => e.Value == tile_type.Block).Count ();
+            var blocks = tiles.Where(e => e.Value == tile_type.Block).Count();
 
-            Console.WriteLine ("Part 1: " + blocks.ToString ());
+            Console.WriteLine("Part 1: " + blocks.ToString());
 
-            intMachine = new SynchronousIntMachine (input);
+            intMachine = new SynchronousIntMachine(input);
 
-            intMachine.SetMemoryRegister (0, 2);
+            intMachine.SetMemoryRegister(0, 2);
 
             long score = 0;
             var blockCount = blocks;
             var ball = Classes.Point.Empty;
             var paddle = Classes.Point.Empty;
             ReturnCode returnCode;
-            while (blockCount > -1 && (returnCode = intMachine.RunUntilBlockOrComplete ()) != ReturnCode.Completed)
+            while (blockCount > -1 && (returnCode = intMachine.RunUntilBlockOrComplete()) != ReturnCode.Completed)
             {
                 switch (returnCode)
                 {
-                case ReturnCode.WaitingForInput:
-                    if (blockCount == 0) { blockCount = -1; break; }
-                    var joystickInput = ball.X.CompareTo (paddle.X);
-                    intMachine.InputQueue.Enqueue (joystickInput);
-                    break;
-                case ReturnCode.WrittenOutput:
-                    while (intMachine.OutputQueue.Count < 3) { intMachine.RunUntilBlockOrComplete (); }
-                    var x = (int) intMachine.OutputQueue.Dequeue ();
-                    var y = (int) intMachine.OutputQueue.Dequeue ();
-                    var t = intMachine.OutputQueue.Dequeue ();
+                    case ReturnCode.WaitingForInput:
+                        if (blockCount == 0) { blockCount = -1; break; }
+                        var joystickInput = ball.X.CompareTo(paddle.X);
+                        intMachine.InputQueue.Enqueue(joystickInput);
+                        break;
 
-                    if (x == -1)
-                    {
-                        score = t;
-                    }
-                    else
-                    {
-                        var tile = (tile_type) t;
-                        if (tile != tile_type.Block && tiles [new PointInt (x, y)] == tile_type.Block) { blockCount--; }
-                        tiles [new PointInt (x, y)] = tile;
+                    case ReturnCode.WrittenOutput:
+                        while (intMachine.OutputQueue.Count < 3) { intMachine.RunUntilBlockOrComplete(); }
+                        var x = (int)intMachine.OutputQueue.Dequeue();
+                        var y = (int)intMachine.OutputQueue.Dequeue();
+                        var t = intMachine.OutputQueue.Dequeue();
 
-                        if (tile == tile_type.Ball)
+                        if (x == -1)
                         {
-                            ball = new Classes.Point (x, y);
+                            score = t;
                         }
-                        else if (tile == tile_type.HorizPaddle)
+                        else
                         {
-                            paddle = new Classes.Point (x, y);
+                            var tile = (tile_type)t;
+                            if (tile != tile_type.Block && tiles[new PointInt(x, y)] == tile_type.Block) { blockCount--; }
+                            tiles[new PointInt(x, y)] = tile;
+
+                            if (tile == tile_type.Ball)
+                            {
+                                ball = new Classes.Point(x, y);
+                            }
+                            else if (tile == tile_type.HorizPaddle)
+                            {
+                                paddle = new Classes.Point(x, y);
+                            }
                         }
-                    }
-                    break;
+                        break;
                 }
             }
 
-            Console.WriteLine ("Part 2: " + score);
-
+            Console.WriteLine("Part 2: " + score);
         }
     }
-
 }
