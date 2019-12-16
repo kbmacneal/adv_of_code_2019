@@ -46,27 +46,28 @@ namespace adv_of_code_2019
 
             for (int i = 0; i < 100; i++)
             {
-                part2list = part2(part2list);
+                part2list = part2 (part2list);
             }
 
-            Console.WriteLine("Part 2: " + String.Join("",part2list.Skip(offset).Take(8)));
+            Console.WriteLine ("Part 2: " + String.Join ("", part2list.Skip (offset).Take (8)));
 
         }
 
-        private static List<int> part2(List<int> input)
-	{
-		List<int> b = new List<int>();
-		
-		int acc = 0;		
-		for (int i = 0; i < input.Count; i++) {
-			int n = input[input.Count-i-1];
-			acc += n;
-			b.Add(acc % 10);
-		}
-		b.Reverse();
-		return b;
-		
-	}
+        private static List<int> part2 (List<int> input)
+        {
+            List<int> b = new List<int> ();
+
+            int acc = 0;
+            for (int i = 0; i < input.Count; i++)
+            {
+                int n = input [input.Count - i - 1];
+                acc += n;
+                b.Add (acc % 10);
+            }
+            b.Reverse ();
+            return b;
+
+        }
 
         private static List<int> GenerateMask (int position, int length)
         {
