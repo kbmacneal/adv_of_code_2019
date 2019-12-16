@@ -42,8 +42,6 @@ namespace adv_of_code_2019
 
             var offset = Int32.Parse (string.Join ("", ints.Take (7)));
 
-            //5,977,737
-
             for (int i = 0; i < 100; i++)
             {
                 part2list = part2 (part2list);
