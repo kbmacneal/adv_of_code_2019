@@ -11,7 +11,6 @@ namespace adv_of_code_2019
 {
     public static class Day17
     {
-
         public static async Task Run ()
         {
             var input = (await File.ReadAllTextAsync ("inputs\\17.txt"));
@@ -60,13 +59,13 @@ namespace adv_of_code_2019
             var B = "L,6,L,4,L,12\n";
             var C = "R,10,L,8,L,4,R,10\n";
 
-            var seq = "A,B,A,B,C,B,A,C,B,C\n"; 
+            var seq = "A,B,A,B,C,B,A,C,B,C\n";
 
-            var la = A.ToCharArray().Length;
-            var lb = B.ToCharArray().Length;
-            var lc = C.ToCharArray().Length;
-            
-            var ls = seq.ToCharArray().Length;
+            var la = A.ToCharArray ().Length;
+            var lb = B.ToCharArray ().Length;
+            var lc = C.ToCharArray ().Length;
+
+            var ls = seq.ToCharArray ().Length;
 
             seq.ToList<char> ().ForEach (e => myIntMachine.InputQueue.Enqueue ((int) e));
 
@@ -87,11 +86,11 @@ namespace adv_of_code_2019
                 c++;
             }
 
-            string q = "";
+            // string q = "";
 
-            myIntMachine.OutputQueue.ToList ().ForEach (e => q += ((char) e));
+            // myIntMachine.OutputQueue.ToList ().ForEach (e => q += ((char) e));
 
-            await File.WriteAllTextAsync ("outputs\\debug.txt", q);
+            // await File.WriteAllTextAsync ("outputs\\debug.txt", q);
 
             var part2 = myIntMachine.OutputQueue.Last ();
 
