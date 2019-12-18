@@ -48,7 +48,7 @@ namespace adv_of_code_2019
 
             Console.WriteLine ("Part 1: " + minimumSteps.ToString ());
 
-            Console.WriteLine("Part 2: " + await Part2());
+            Console.WriteLine ("Part 2: " + await Part2 ());
 
         }
 
