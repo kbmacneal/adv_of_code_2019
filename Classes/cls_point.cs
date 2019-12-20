@@ -89,14 +89,29 @@ namespace adv_of_code_2019.Classes
         {
             get
             {
-                return index
-                switch
+                // return index
+                // switch
+                // {
+                //     1 => P1,
+                //         2 => P2,
+                //         3 => P3,
+                //         4 => P4,
+                //         0 => new P()
+                // };
+
+                switch (index)
                 {
-                    1 => P1,
-                        2 => P2,
-                        3 => P3,
-                        4 => P4
-                };
+                case 1:
+                    return P1;
+                case 2:
+                    return P2;
+                case 3:
+                    return P3;
+                case 4:
+                    return P4;
+                default:
+                    throw new KeyNotFoundException ();
+                }
             }
             set
             {
