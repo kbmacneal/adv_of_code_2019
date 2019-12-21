@@ -111,6 +111,11 @@ namespace adv_of_code_2019
                 Completed = 99
             }
 
+            public void addASCIILine(string line)
+            {
+                line.ToList<char>().ForEach(e => this.InputQueue.Enqueue((int)e));
+            }
+
             public Queue<long> InputQueue { get; }
 
             public Queue<long> OutputQueue { get; }
