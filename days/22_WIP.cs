@@ -38,8 +38,13 @@ namespace adv_of_code_2019
             }
 
             Console.WriteLine ("Part 1: " + deck.IndexOf (2019));
+            Part2(input);
 
-            size = 119315717514047;
+        }
+
+        private static void Part2(string[] inputs)
+        {
+            BigInteger size = 119315717514047;
             BigInteger iter = 101741582076661;
             BigInteger position = 2020;
             BigInteger offset_diff = 0;
@@ -47,35 +52,54 @@ namespace adv_of_code_2019
 
             // var rev = new Queue<string> (input.Reverse ());
 
-            foreach (var line in input)
+            foreach (var line in inputs)
             {
-                if (line.Contains ("cut"))
-                {
-                    offset_diff += Int32.Parse (line.Split (" ").Last ()) * increment_mul;
-                }
-                else if (line == "deal into new stack")
-                {
-                    increment_mul *= -1;
-                    offset_diff += increment_mul;
-                }
-                else
-                {
-                    increment_mul *= BigInteger.ModPow (Int32.Parse (line.Split (" ").Last ()), size - 2, size);
-                }
-
-                increment_mul %= size;
-                offset_diff %= size;
+                RunP2 (ref increment_mul, ref offset_diff, size, line);
             }
 
-            var increment = BigInteger.ModPow (increment_mul, iter, size);
-            var offset = offset_diff * (1 - increment) * BigInteger.ModPow ((1 - increment_mul) % size, size - 2, size);
-
+            var inc = increment_mul.mpow (iter, size);
+            var offset = offset_diff * (1-inc) * BigInteger.ModPow ((1 - increment_mul) % size, size - 2, size);
             offset %= size;
-
-            var card = (offset + 2020 * increment) % size;
+            var card = (offset + 2020 * inc) % size;
 
             Console.WriteLine ("Part 2: " + card);
+        }
 
+        private static void RunP2 (ref BigInteger inc_mul, ref BigInteger offset_diff, BigInteger size, string line)
+        {
+            if (line.Contains ("cut"))
+            {
+                offset_diff += Int32.Parse (line.Split (" ").Last ()) * inc_mul;
+            }
+            else if (line == "deal into new stack")
+            {
+                inc_mul *= -1;
+                offset_diff += inc_mul;
+            }
+            else
+            {
+                var num = Int32.Parse (line.Split (" ").Last ());
+
+                inc_mul *= num.TBI().mpow(size-2,size);
+            }
+
+            inc_mul %= size;
+            offset_diff %= size;
+        }
+
+        private static BigInteger TBI (this long num)
+        {
+            return new BigInteger (num);
+        }
+
+        private static BigInteger TBI (this int num)
+        {
+            return new BigInteger (num);
+        }
+
+        private static BigInteger mpow (this BigInteger bigInteger, BigInteger pow, BigInteger mod)
+        {
+            return BigInteger.ModPow (bigInteger, pow, mod);
         }
 
         //74662303452927
