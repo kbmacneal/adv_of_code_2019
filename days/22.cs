@@ -53,6 +53,7 @@ namespace adv_of_code_2019
             {
                 RunP2 (ref increment_mul, ref offset_diff, size, line);
             }
+            
             (BigInteger increment, BigInteger offset) = getseq (iter, increment_mul, offset_diff, size);
 
             var card = get (offset, increment, 2020, size);
@@ -77,9 +78,9 @@ namespace adv_of_code_2019
 
                 inc_mul *= num.TBI ().inv (size);
             }
-            
-            inc_mul = inc_mul.mod(size);
-            offset_diff = offset_diff.mod(size);
+
+            inc_mul = inc_mul.mod (size);
+            offset_diff = offset_diff.mod (size);
         }
 
         private static BigInteger mod (this BigInteger x, BigInteger m)
