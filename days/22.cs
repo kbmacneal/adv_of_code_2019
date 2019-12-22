@@ -53,7 +53,7 @@ namespace adv_of_code_2019
             {
                 RunP2 (ref increment_mul, ref offset_diff, size, line);
             }
-            
+
             (BigInteger increment, BigInteger offset) = getseq (iter, increment_mul, offset_diff, size);
 
             var card = get (offset, increment, 2020, size);
@@ -118,8 +118,6 @@ namespace adv_of_code_2019
         {
             return BigInteger.ModPow (bigInteger, pow, mod);
         }
-
-        //74662303452927
 
         private static List<int> DealNewDeck (this List<int> deck)
         {
