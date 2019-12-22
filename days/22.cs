@@ -14,7 +14,6 @@ namespace adv_of_code_2019
         {
             var input = (await File.ReadAllLinesAsync ("inputs\\22.txt"));
             BigInteger size = 10007;
-            //var size = 10;
 
             var deck = Enumerable.Range (0, Int32.Parse (size.ToString ())).ToList ();
 
@@ -38,11 +37,11 @@ namespace adv_of_code_2019
             }
 
             Console.WriteLine ("Part 1: " + deck.IndexOf (2019));
-            Part2(input);
+            Part2 (input);
 
         }
 
-        private static void Part2(string[] inputs)
+        private static void Part2 (string[] inputs)
         {
             BigInteger size = 119315717514047;
             BigInteger iter = 101741582076661;
@@ -50,24 +49,20 @@ namespace adv_of_code_2019
             BigInteger offset_diff = 0;
             BigInteger increment_mul = 1;
 
-            // var rev = new Queue<string> (input.Reverse ());
-
             foreach (var line in inputs)
             {
                 RunP2 (ref increment_mul, ref offset_diff, size, line);
             }
+            (BigInteger increment, BigInteger offset) = getseq (iter, increment_mul, offset_diff, size);
 
-            var inc = increment_mul.mpow (iter, size);
-            var offset = offset_diff * (1-inc) * BigInteger.ModPow ((1 - increment_mul) % size, size - 2, size);
-            offset %= size;
-            var card = (offset + 2020 * inc) % size;
+            var card = get (offset, increment, 2020, size);
 
             Console.WriteLine ("Part 2: " + card);
         }
 
         private static void RunP2 (ref BigInteger inc_mul, ref BigInteger offset_diff, BigInteger size, string line)
         {
-            if (line.Contains ("cut"))
+            if (line.StartsWith ("cut"))
             {
                 offset_diff += Int32.Parse (line.Split (" ").Last ()) * inc_mul;
             }
@@ -80,16 +75,37 @@ namespace adv_of_code_2019
             {
                 var num = Int32.Parse (line.Split (" ").Last ());
 
-                inc_mul *= num.TBI().mpow(size-2,size);
+                inc_mul *= num.TBI ().inv (size);
             }
-
-            inc_mul %= size;
-            offset_diff %= size;
+            
+            inc_mul = inc_mul.mod(size);
+            offset_diff = offset_diff.mod(size);
         }
 
-        private static BigInteger TBI (this long num)
+        private static BigInteger mod (this BigInteger x, BigInteger m)
         {
-            return new BigInteger (num);
+            return (x % m + m) % m;
+        }
+
+        private static BigInteger inv (this BigInteger num, BigInteger size)
+        {
+            return num.mpow (size - 2, size);
+        }
+
+        private static BigInteger get (BigInteger offset, BigInteger increment, BigInteger i, BigInteger size)
+        {
+            return (offset + i * increment) % size;
+        }
+
+        private static (BigInteger increment, BigInteger offset) getseq (this BigInteger iterations, BigInteger inc_mul, BigInteger offset_diff, BigInteger size)
+        {
+            var increment = inc_mul.mpow (iterations, size);
+
+            var offset = offset_diff * (1 - increment) * ((1 - inc_mul) % size).inv (size);
+
+            offset %= size;
+
+            return (increment, offset);
         }
 
         private static BigInteger TBI (this int num)
