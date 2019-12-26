@@ -123,7 +123,7 @@ namespace adv_of_code_2019
             return ((int) o.Dequeue (), o.Dequeue (), o.Dequeue ());
         }
 
-        private static IEnumerable < (TItem Item, int Index) > WithIndex<TItem> (this IEnumerable<TItem> sequence) => sequence.Select ((x, i) => (x, i));
+        public static IEnumerable < (TItem Item, int Index) > WithIndex<TItem> (this IEnumerable<TItem> sequence) => sequence.Select ((x, i) => (x, i));
 
     }
 }
