@@ -62,17 +62,54 @@ namespace adv_of_code_2019.Classes
 
         private double? myAngle;
         private double? myLength;
-    }
 
-    public interface IPoint : IEquatable<IPoint>
-    {
-        public int X { get; }
+        public List<Point> moveUp (int spaces)
+        {
+            var traveled_spaces = new List<Point> ();
 
-        public int Y { get; }
+            for (int i = 1; i <= spaces; i++)
+            {
+                traveled_spaces.Add (new Point (this.X, this.Y + i));
+            }
 
-        public bool Equals (Point other) => X == other.X && Y == other.Y;
+            return traveled_spaces;
+        }
 
-        public static Point Empty { get; } = new Point (0, 0);
+        public List<Point> moveDown (int spaces)
+        {
+            var traveled_spaces = new List<Point> ();
+
+            for (int i = 1; i <= spaces; i++)
+            {
+                traveled_spaces.Add (new Point (this.X, this.Y - i));
+            }
+
+            return traveled_spaces;
+        }
+
+        public List<Point> moveRight (int spaces)
+        {
+            var traveled_spaces = new List<Point> ();
+
+            for (int i = 1; i <= spaces; i++)
+            {
+                traveled_spaces.Add (new Point (this.X + i, this.Y));
+            }
+
+            return traveled_spaces;
+        }
+
+        public List<Point> moveLeft (int spaces)
+        {
+            var traveled_spaces = new List<Point> ();
+
+            for (int i = 1; i <= spaces; i++)
+            {
+                traveled_spaces.Add (new Point (this.X - i, this.Y));
+            }
+
+            return traveled_spaces;
+        }
     }
 
     public struct PSet : IEquatable<PSet>
@@ -89,16 +126,6 @@ namespace adv_of_code_2019.Classes
         {
             get
             {
-                // return index
-                // switch
-                // {
-                //     1 => P1,
-                //         2 => P2,
-                //         3 => P3,
-                //         4 => P4,
-                //         0 => new P()
-                // };
-
                 switch (index)
                 {
                 case 1:

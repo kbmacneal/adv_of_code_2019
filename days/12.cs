@@ -1,8 +1,8 @@
-using adv_of_code_2019.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using adv_of_code_2019.Classes;
 using VectorAndPoint.ValTypes;
 
 namespace adv_of_code_2019
@@ -12,52 +12,52 @@ namespace adv_of_code_2019
         private class moon : IEquatable<moon>
         {
             public Point3D Position { get; set; }
-            public Vector3D Velocity { get; set; } = new Vector3D(0, 0, 0);
+            public Vector3D Velocity { get; set; } = new Vector3D (0, 0, 0);
             public int p_energy { get; set; }
             public int k_energy { get; set; }
 
-            public moon(int X, int Y, int Z)
+            public moon (int X, int Y, int Z)
             {
-                this.Position = new Point3D(X, Y, Z);
+                this.Position = new Point3D (X, Y, Z);
             }
 
-            public bool Equals(moon m)
+            public bool Equals (moon m)
             {
                 return this.Position == m.Position && this.Velocity == m.Velocity;
             }
         }
 
-        public static async Task Run()
+        public static async Task Run ()
         {
-            List<moon> moons = RefreshMoons();
+            List<moon> moons = RefreshMoons ();
 
             var stepcount = 1000;
 
             for (int i = 0; i < stepcount; i++)
             {
-                StepVelo(ref moons);
+                StepVelo (ref moons);
             }
 
             foreach (var moon in moons)
             {
-                moon.p_energy = ((int)moon.Position.X).Abs() + ((int)moon.Position.Y).Abs() + ((int)moon.Position.Z).Abs();
+                moon.p_energy = ((int) moon.Position.X).Abs () + ((int) moon.Position.Y).Abs () + ((int) moon.Position.Z).Abs ();
 
-                moon.k_energy = ((int)moon.Velocity.X).Abs() + ((int)moon.Velocity.Y).Abs() + ((int)moon.Velocity.Z).Abs();
+                moon.k_energy = ((int) moon.Velocity.X).Abs () + ((int) moon.Velocity.Y).Abs () + ((int) moon.Velocity.Z).Abs ();
             }
 
-            var part1 = moons.Select(e => e.p_energy * e.k_energy).Sum();
+            var part1 = moons.Select (e => e.p_energy * e.k_energy).Sum ();
 
-            Console.WriteLine("Part 1: " + part1.ToString());
+            Console.WriteLine ("Part 1: " + part1.ToString ());
 
-            moons = RefreshMoons();
-            var orig_moons = RefreshMoons();
-            var intervals = new int[3];
+            moons = RefreshMoons ();
+            var orig_moons = RefreshMoons ();
+            var intervals = new int [3];
             var completed = false;
             var c = 0;
 
             while (!completed)
             {
-                StepVelo(ref moons);
+                StepVelo (ref moons);
                 c++;
 
                 for (var axis = 0; axis < 3; axis++)
@@ -65,13 +65,13 @@ namespace adv_of_code_2019
                     // go through X => Y =>Z
                     // find the interval that each axis processes through
                     // compare to 0 to not recalculate the period of an axis twice
-                    if (intervals[axis] == 0)
+                    if (intervals [axis] == 0)
                     {
-                        if (AreAxisStatesEqual(orig_moons, moons, (Axis)axis))
+                        if (AreAxisStatesEqual (orig_moons, moons, (Axis) axis))
                         {
-                            intervals[axis] = c;
+                            intervals [axis] = c;
                             //complete when all the axes have a period associated with them
-                            if (intervals.All(x => x > 0))
+                            if (intervals.All (x => x > 0))
                             {
                                 completed = true;
                                 break;
@@ -80,12 +80,12 @@ namespace adv_of_code_2019
                     }
                 }
             }
-            Console.WriteLine("Part 2: " + intervals.GetLCM().ToString());
+            Console.WriteLine ("Part 2: " + intervals.GetLCM ().ToString ());
         }
 
-        private static List<moon> RefreshMoons()
+        private static List<moon> RefreshMoons ()
         {
-            return new List<moon>()
+            return new List<moon> ()
             {
                 new moon (17, -12, 13),
                     new moon (2, 1, 1),
@@ -94,20 +94,20 @@ namespace adv_of_code_2019
             };
         }
 
-        private static void StepVelo(ref List<moon> moons)
+        private static void StepVelo (ref List<moon> moons)
         {
             var length = moons.Count;
             for (var indexA = 0; indexA < length; indexA++)
             {
-                var moonA = moons[indexA];
+                var moonA = moons [indexA];
                 for (var indexB = indexA + 1; indexB < length; indexB++)
                 {
-                    var moonB = moons[indexB];
-                    var diffX = moonA.Position.X.CompareTo(moonB.Position.X);
-                    var diffY = moonA.Position.Y.CompareTo(moonB.Position.Y);
-                    var diffZ = moonA.Position.Z.CompareTo(moonB.Position.Z);
+                    var moonB = moons [indexB];
+                    var diffX = moonA.Position.X.CompareTo (moonB.Position.X);
+                    var diffY = moonA.Position.Y.CompareTo (moonB.Position.Y);
+                    var diffZ = moonA.Position.Z.CompareTo (moonB.Position.Z);
 
-                    var gravity = new Vector3D(diffX, diffY, diffZ);
+                    var gravity = new Vector3D (diffX, diffY, diffZ);
                     moonA.Velocity += gravity * -1;
                     moonB.Velocity += gravity;
                 }
@@ -115,7 +115,7 @@ namespace adv_of_code_2019
             }
         }
 
-        private static bool AreAxisStatesEqual(List<moon> original, List<moon> current, Axis axis)
+        private static bool AreAxisStatesEqual (List<moon> original, List<moon> current, Axis axis)
         {
             var length = original.Count;
             for (var i = 0; i < length; i++)
@@ -123,20 +123,20 @@ namespace adv_of_code_2019
                 bool rtn = false;
                 switch (axis)
                 {
-                    case Axis.X:
-                        rtn = original[i].Position.X != current[i].Position.X || original[i].Velocity.X != current[i].Velocity.X;
-                        break;
+                case Axis.X:
+                    rtn = original [i].Position.X != current [i].Position.X || original [i].Velocity.X != current [i].Velocity.X;
+                    break;
 
-                    case Axis.Y:
-                        rtn = original[i].Position.Y != current[i].Position.Y || original[i].Velocity.Y != current[i].Velocity.Y;
-                        break;
+                case Axis.Y:
+                    rtn = original [i].Position.Y != current [i].Position.Y || original [i].Velocity.Y != current [i].Velocity.Y;
+                    break;
 
-                    case Axis.Z:
-                        rtn = original[i].Position.Z != current[i].Position.Z || original[i].Velocity.Z != current[i].Velocity.Z;
-                        break;
+                case Axis.Z:
+                    rtn = original [i].Position.Z != current [i].Position.Z || original [i].Velocity.Z != current [i].Velocity.Z;
+                    break;
 
-                    default:
-                        throw new InvalidOperationException();
+                default:
+                    throw new InvalidOperationException ();
                 }
                 if (rtn) { return false; }
             }

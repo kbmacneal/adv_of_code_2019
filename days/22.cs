@@ -41,7 +41,7 @@ namespace adv_of_code_2019
 
         }
 
-        private static void Part2 (string[] inputs)
+        private static void Part2 (string [] inputs)
         {
             BigInteger size = 119315717514047;
             BigInteger iter = 101741582076661;
@@ -148,11 +148,11 @@ namespace adv_of_code_2019
 
         private static List<int> DealwithInc (this List<int> deck, int n)
         {
-            var newdeck = new int[deck.Count];
+            var newdeck = new int [deck.Count];
 
             for (int i = 0; i < deck.Count; i++)
             {
-                newdeck[(n * i) % deck.Count] = deck[i];
+                newdeck [(n * i) % deck.Count] = deck [i];
             }
 
             return newdeck.ToList ();

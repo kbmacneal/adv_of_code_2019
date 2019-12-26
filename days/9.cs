@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2019
@@ -12,42 +13,31 @@ namespace adv_of_code_2019
         {
             var inputs = await File.ReadAllTextAsync("inputs\\9.txt");
 
-            List<long> commands = new List<long>();
+            painter.SynchronousIntMachine vm = new painter.SynchronousIntMachine(inputs);
 
-            foreach (string s in inputs.Split(','))
+            vm.InputQueue.Enqueue(1);
+
+            var c = 0;
+
+            while (vm.RunUntilBlockOrComplete() != painter.SynchronousIntMachine.ReturnCode.Completed)
             {
-                if (long.TryParse(s, out long parsed))
-                {
-                    commands.Add(parsed);
-                }
-                else
-                {
-                    throw new Exception($"Failed to parse '{s}' to a long");
-                }
+                c++;
             }
 
-            Processor pcA = new Processor(commands.ToArray());
-            pcA.ProgramOutput += Pc_ProgramOutput;
-            pcA.ProgramFinish += Pc_ProgramFinish;
-            pcA.AddInput(1);
+            Console.WriteLine("Part 1: " + vm.OutputQueue.Last());
 
-            Console.WriteLine("Part 1:");
-            pcA.ProccessProgram();
+            vm = new painter.SynchronousIntMachine(inputs);
 
-            pcA.ResetInputs();
-            pcA.AddInput(2);
+            vm.InputQueue.Enqueue(2);
 
-            Console.WriteLine("Part 2:");
-            pcA.ProccessProgram();
-        }
+            c = 0;
 
-        private static void Pc_ProgramFinish(object sender, EventArgs e)
-        {
-        }
+            while (vm.RunUntilBlockOrComplete() != painter.SynchronousIntMachine.ReturnCode.Completed)
+            {
+                c++;
+            }
 
-        private static void Pc_ProgramOutput(object sender, OutputEventArgs e)
-        {
-            Console.WriteLine(e.OutputValue);
+            Console.WriteLine("Part 2: " + vm.OutputQueue.Last());
         }
     }
 }

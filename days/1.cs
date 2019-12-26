@@ -10,36 +10,36 @@ namespace adv_of_code_2019
     {
         private static decimal part_2_total = 0M;
 
-        public static async Task Run()
+        public static async Task Run ()
         {
-            List<Decimal> summer = new List<Decimal>();
-            List<int> inputs = (await File.ReadAllLinesAsync("inputs/1.txt")).Select(e => Int32.Parse(e)).ToList();
+            List<Decimal> summer = new List<Decimal> ();
+            List<int> inputs = (await File.ReadAllLinesAsync ("inputs/1.txt")).Select (Int32.Parse).ToList ();
 
-            inputs.ForEach(e =>
+            inputs.ForEach (e =>
             {
-                summer.Add(getfuel(e));
+                summer.Add (getfuel (e));
             });
 
-            Console.WriteLine("Part 1: " + summer.Sum().ToString());
+            Console.WriteLine ("Part 1: " + summer.Sum ().ToString ());
 
-            inputs = (await File.ReadAllLinesAsync("inputs/1_2.txt")).Select(e => Int32.Parse(e)).ToList();
+            inputs = (await File.ReadAllLinesAsync ("inputs/1_2.txt")).Select (Int32.Parse).ToList ();
 
-            inputs.ForEach(e =>
+            inputs.ForEach (e =>
             {
-                getfuelrecurse(e);
+                getfuelrecurse (e);
             });
 
-            Console.WriteLine("Part 2: " + part_2_total.ToString());
+            Console.WriteLine ("Part 2: " + part_2_total.ToString ());
         }
 
-        public static decimal getfuel(decimal mass)
+        public static decimal getfuel (decimal mass)
         {
-            return Math.Floor(mass / 3) - 2;
+            return Math.Floor (mass / 3) - 2;
         }
 
-        public static decimal getfuelrecurse(decimal mass)
+        public static decimal getfuelrecurse (decimal mass)
         {
-            var needed = getfuel(mass);
+            var needed = getfuel (mass);
 
             if (needed <= 0)
             {
@@ -48,7 +48,7 @@ namespace adv_of_code_2019
             else
             {
                 part_2_total += needed;
-                getfuelrecurse(needed);
+                getfuelrecurse (needed);
             }
 
             return 0M;

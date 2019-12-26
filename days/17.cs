@@ -61,23 +61,18 @@ namespace adv_of_code_2019
 
             var seq = "A,B,A,B,C,B,A,C,B,C\n";
 
-            var la = A.ToCharArray ().Length;
-            var lb = B.ToCharArray ().Length;
-            var lc = C.ToCharArray ().Length;
+            //use these to debug your input lengths
+            //if you are stuck, try outputting the outputqueue after the vm is done running as ascii text
+            // var la = A.ToCharArray ().Length;
+            // var lb = B.ToCharArray ().Length;
+            // var lc = C.ToCharArray ().Length;
+            // var ls = seq.ToCharArray ().Length;
 
-            var ls = seq.ToCharArray ().Length;
-
-            seq.ToList<char> ().ForEach (e => myIntMachine.InputQueue.Enqueue ((int) e));
-
-            A.ToList<char> ().ForEach (e => myIntMachine.InputQueue.Enqueue ((int) e));
-
-            B.ToList<char> ().ForEach (e => myIntMachine.InputQueue.Enqueue ((int) e));
-
-            C.ToList<char> ().ForEach (e => myIntMachine.InputQueue.Enqueue ((int) e));
-
-            myIntMachine.InputQueue.Enqueue ((int)
-                'n');
-            myIntMachine.InputQueue.Enqueue (10);
+            myIntMachine.addASCIILine (seq);
+            myIntMachine.addASCIILine (A);
+            myIntMachine.addASCIILine (B);
+            myIntMachine.addASCIILine (C);
+            myIntMachine.addASCIILine ("n\n");
 
             var c = 0;
 
@@ -85,12 +80,6 @@ namespace adv_of_code_2019
             {
                 c++;
             }
-
-            // string q = "";
-
-            // myIntMachine.OutputQueue.ToList ().ForEach (e => q += ((char) e));
-
-            // await File.WriteAllTextAsync ("outputs\\debug.txt", q);
 
             var part2 = myIntMachine.OutputQueue.Last ();
 

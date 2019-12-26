@@ -53,14 +53,19 @@ namespace adv_of_code_2019.Classes
             }
         }
 
-        public static int Floor(this Decimal d)
+        public static int Floor (this Decimal d)
         {
-            return (int)Math.Floor(d);
+            return (int) Math.Floor (d);
         }
 
-        public static int Floor(this Double d)
+        public static int Floor (this Double d)
         {
-            return (int)Math.Floor(d);
+            return (int) Math.Floor (d);
+        }
+
+        public static int ManhDist (this Point p)
+        {
+            return p.X.Abs () + p.Y.Abs ();
         }
 
         //from https://www.geeksforgeeks.org/lcm-of-given-array-elements/

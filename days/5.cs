@@ -1,6 +1,7 @@
 using adv_of_code_2019.Classes;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2019
@@ -11,21 +12,31 @@ namespace adv_of_code_2019
 
         public static async Task Run()
         {
-            var vm = new day5vm();
+            var vm = new painter.SynchronousIntMachine(await File.ReadAllTextAsync("inputs\\5.txt"));
 
-            vm.input = 1;
+            var c = 0;
 
-            vm.input_instructions = (await File.ReadAllTextAsync("inputs\\5.txt"));
+            vm.InputQueue.Enqueue(1);
 
-            Console.WriteLine("Part 1: " + await vm.Process());
+            while (vm.RunUntilBlockOrComplete() != painter.SynchronousIntMachine.ReturnCode.Completed)
+            {
+                c++;
+            }
 
-            vm = new day5vm();
+            Console.WriteLine("Part 1: " + vm.OutputQueue.Last());
 
-            vm.input = 5;
+            vm = new painter.SynchronousIntMachine(await File.ReadAllTextAsync("inputs\\5.txt"));
 
-            vm.input_instructions = (await File.ReadAllTextAsync("inputs\\5.txt"));
+            vm.InputQueue.Enqueue(5);
 
-            Console.WriteLine("Part 2: " + await vm.Process());
+            c = 0;
+
+            while (vm.RunUntilBlockOrComplete() != painter.SynchronousIntMachine.ReturnCode.Completed)
+            {
+                c++;
+            }
+
+            Console.WriteLine("Part 2: " + vm.OutputQueue.Last());
         }
     }
 }

@@ -1,23 +1,23 @@
-using adv_of_code_2019.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using adv_of_code_2019.Classes;
 
 namespace adv_of_code_2019
 {
     public class Day14
     {
-        public static async Task Run()
+        public static async Task Run ()
         {
             //from https://github.com/tslater2006/AdventOfCode2019 , this one was hurting my brain
-            var refinery = new Refinery(await File.ReadAllLinesAsync("inputs\\14.txt"));
+            var refinery = new Refinery (await File.ReadAllLinesAsync ("inputs\\14.txt"));
 
-            refinery.ProduceMaterial(new RefineryProduction() { Amount = 1, Chemical = "FUEL" });
+            refinery.ProduceMaterial (new RefineryProduction () { Amount = 1, Chemical = "FUEL" });
 
-            Console.WriteLine("Part 1: " + refinery.OreRequired.ToString());
+            Console.WriteLine ("Part 1: " + refinery.OreRequired.ToString ());
 
-            refinery = new Refinery(await File.ReadAllLinesAsync("inputs\\14.txt"));
+            refinery = new Refinery (await File.ReadAllLinesAsync ("inputs\\14.txt"));
             long fuelCount = 0;
             var productionFactor = 10000;
             Dictionary<string, int> oldSurplus = null;
@@ -26,9 +26,9 @@ namespace adv_of_code_2019
             {
                 while (refinery.OreRequired < 1000000000000)
                 {
-                    oldSurplus = new Dictionary<string, int>(refinery.Surplus);
+                    oldSurplus = new Dictionary<string, int> (refinery.Surplus);
                     oldOreRequired = refinery.OreRequired;
-                    refinery.ProduceMaterial(new RefineryProduction() { Amount = productionFactor, Chemical = "FUEL" });
+                    refinery.ProduceMaterial (new RefineryProduction () { Amount = productionFactor, Chemical = "FUEL" });
                     fuelCount += productionFactor;
                 }
 
@@ -36,13 +36,13 @@ namespace adv_of_code_2019
                 if (productionFactor >= 1)
                 {
                     /*reset old state*/
-                    refinery.Surplus = new Dictionary<string, int>(oldSurplus);
+                    refinery.Surplus = new Dictionary<string, int> (oldSurplus);
                     refinery.OreRequired = oldOreRequired;
                     fuelCount -= productionFactor;
                     productionFactor /= 10;
                 }
             }
-            Console.WriteLine("Part 2: " + fuelCount.ToString());
+            Console.WriteLine ("Part 2: " + fuelCount.ToString ());
         }
     }
 }

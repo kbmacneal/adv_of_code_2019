@@ -1,9 +1,9 @@
-using adv_of_code_2019.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using adv_of_code_2019.Classes;
 using static adv_of_code_2019.painter;
 
 namespace adv_of_code_2019
@@ -20,96 +20,98 @@ namespace adv_of_code_2019
 
         private static readonly Dictionary<int, Point> myDirections = new Dictionary<int, Point>
         {
-            [1] = new Point(0, -1), // North
-            [2] = new Point(0, 1),  // South
-            [3] = new Point(-1, 0), // West
-            [4] = new Point(1, 0)   // East
+            [1] = new Point (0, -1), // North
+            [2] = new Point (0, 1), // South
+            [3] = new Point (-1, 0), // West
+            [4] = new Point (1, 0) // East
         };
 
-        public static async Task Run()
+        public static async Task Run ()
         {
-            var input = await File.ReadAllTextAsync("inputs\\15.txt");
+            var input = await File.ReadAllTextAsync ("inputs\\15.txt");
 
-            myIntMachine = new SynchronousIntMachine(input);
-            Map = new Dictionary<Classes.Point, Tile>() { [new Classes.Point(0, 0)] = Tile.Empty };
-            PathToOxygenGenerator = new List<Classes.Point>();
-            await Backtrack(new Point(0, 0), null);
+            myIntMachine = new SynchronousIntMachine (input);
+            Map = new Dictionary<Classes.Point, Tile> () {
+                [new Classes.Point (0, 0)] = Tile.Empty };
+            PathToOxygenGenerator = new List<Classes.Point> ();
+            await Backtrack (new Point (0, 0), null);
 
-            Console.WriteLine("Part 1: " + PathToOxygenGenerator.Count().ToString());
+            Console.WriteLine ("Part 1: " + PathToOxygenGenerator.Count ().ToString ());
 
-            var o2gen = Map.First(x => x.Value == Tile.OxygenSystem).Key;
+            var o2gen = Map.First (x => x.Value == Tile.OxygenSystem).Key;
             var maxDistance = 0;
-            Visited = new HashSet<Point>();
-            var queue = new Queue<(Point p, int distance)>(new[] { (o2gen, 0) });
+            Visited = new HashSet<Point> ();
+            var queue = new Queue < (Point p, int distance) > (new [] {
+                (o2gen, 0) });
             while (queue.Count > 0)
             {
-                var (pos, distance) = queue.Dequeue();
-                if (!Visited.Add(pos)) { continue; }
+                var (pos, distance) = queue.Dequeue ();
+                if (!Visited.Add (pos)) { continue; }
                 if (distance > maxDistance) { maxDistance = distance; }
 
                 for (var directionCode = 1; directionCode <= 4; directionCode++)
                 {
-                    var direction = myDirections[directionCode];
+                    var direction = myDirections [directionCode];
                     var nextPos = pos + direction;
-                    if (Visited.Contains(nextPos) || Map[nextPos] == Tile.Wall) { continue; }
+                    if (Visited.Contains (nextPos) || Map [nextPos] == Tile.Wall) { continue; }
 
-                    queue.Enqueue((nextPos, distance + 1));
+                    queue.Enqueue ((nextPos, distance + 1));
                 }
             }
 
-            Console.WriteLine("Part 2: " + maxDistance.ToString());
+            Console.WriteLine ("Part 2: " + maxDistance.ToString ());
         }
 
-        private static async Task<bool> Backtrack(Point pos, Point? backDirection)
+        private static async Task<bool> Backtrack (Point pos, Point? backDirection)
         {
             var backDirectionCode = -1;
             var foundPath = false;
             for (var directionCode = 1; directionCode <= 4; directionCode++)
             {
-                var direction = myDirections[directionCode];
+                var direction = myDirections [directionCode];
                 if (direction == backDirection) { backDirectionCode = directionCode; continue; }
 
                 var nextPos = pos + direction;
-                if (Map.ContainsKey(nextPos)) { continue; }
+                if (Map.ContainsKey (nextPos)) { continue; }
 
-                long tileCode = Step(directionCode);
+                long tileCode = Step (directionCode);
                 switch (tileCode)
                 {
-                    case 0:
-                        Map[nextPos] = Tile.Wall;
-                        break;
+                case 0:
+                    Map [nextPos] = Tile.Wall;
+                    break;
 
-                    case 1:
-                        Map[nextPos] = Tile.Empty;
-                        if (await Backtrack(nextPos, direction * -1))
-                        {
-                            PathToOxygenGenerator.Add(pos);
-                            foundPath = true;
-                        }
-                        break;
-
-                    case 2:
-                        Map[nextPos] = Tile.OxygenSystem;
-                        PathToOxygenGenerator.Add(pos);
+                case 1:
+                    Map [nextPos] = Tile.Empty;
+                    if (await Backtrack (nextPos, direction * -1))
+                    {
+                        PathToOxygenGenerator.Add (pos);
                         foundPath = true;
-                        await Backtrack(nextPos, direction * -1);
-                        break;
+                    }
+                    break;
+
+                case 2:
+                    Map [nextPos] = Tile.OxygenSystem;
+                    PathToOxygenGenerator.Add (pos);
+                    foundPath = true;
+                    await Backtrack (nextPos, direction * -1);
+                    break;
                 }
             }
 
             if (backDirection != null)
             {
-                Step(backDirectionCode);
+                Step (backDirectionCode);
             }
 
             return foundPath;
         }
 
-        private static long Step(int directionCode)
+        private static long Step (int directionCode)
         {
-            myIntMachine.InputQueue.Enqueue(directionCode);
-            myIntMachine.RunUntilBlockOrComplete();
-            var tileCode = myIntMachine.OutputQueue.Dequeue();
+            myIntMachine.InputQueue.Enqueue (directionCode);
+            myIntMachine.RunUntilBlockOrComplete ();
+            var tileCode = myIntMachine.OutputQueue.Dequeue ();
 
             return tileCode;
         }
