@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace adv_of_code_2019.Classes
+namespace adv_of_code_.Classes
 {
     public static class Extensions
     {

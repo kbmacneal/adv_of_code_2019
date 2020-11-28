@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CommandLine;
 
-namespace adv_of_code_2019
+namespace adv_of_code_2020
 {
     internal class Program
     {
@@ -31,9 +31,9 @@ namespace adv_of_code_2019
                     {
                         var max_day = Assembly.GetEntryAssembly ().GetTypes ().Where (e => e.FullName.Contains ("Day") && !e.FullName.Contains("+")).Select (e => e.FullName.Substring(20)).Select (Int32.Parse).Max ();
 
-                        Console.WriteLine("Running " + "adv_of_code_2019.Day" + max_day.ToString ());
+                        Console.WriteLine("Running " + "adv_of_code_2020.Day" + max_day.ToString ());
 
-                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + max_day.ToString ());
+                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2020.Day" + max_day.ToString ());
 
                         MethodInfo method = cls.GetMethod ("Run");
 
@@ -46,9 +46,9 @@ namespace adv_of_code_2019
 
                     if (o.day > 0)
                     {
-                        Console.WriteLine("Running " + "adv_of_code_2019.Day" + o.day.ToString ());
+                        Console.WriteLine("Running " + "adv_of_code_2020.Day" + o.day.ToString ());
 
-                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + o.day.ToString ());
+                        var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2020.Day" + o.day.ToString ());
 
                         MethodInfo method = cls.GetMethod ("Run");
 
@@ -65,7 +65,7 @@ namespace adv_of_code_2019
 
                         if (Int32.TryParse (Console.ReadLine (), out var day_num))
                         {
-                            var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2019.Day" + day_num.ToString ());
+                            var cls = Assembly.GetEntryAssembly ().GetType ("adv_of_code_2020.Day" + day_num.ToString ());
 
                             MethodInfo method = cls.GetMethod ("Run");
 

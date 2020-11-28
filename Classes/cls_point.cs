@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace adv_of_code_2019.Classes
+namespace adv_of_code_.Classes
 {
     [DebuggerDisplay ("X={X} Y={Y}")]
     public struct Point : IEquatable<Point>

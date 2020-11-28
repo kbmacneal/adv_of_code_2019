@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "adv_of_code_2019": {
+    "adv_of_code_": {
       "commandName": "Project",
       "commandLineArgs": "-l"
     }
